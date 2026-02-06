@@ -1,0 +1,48 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+venv/
+
+# =========================
+# Docker
+# =========================
+*.log
+docker-compose.override.yml
+
+# =========================
+# Kubernetes / Minikube
+# =========================
+.kube/
+minikube/
+*.kubeconfig
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# Build / Temp
+# =========================
+dist/
+build/
+*.tmp
+*.swp
+
+# =========================
+# Secrets (VERY IMPORTANT)
+# =========================
+*.pem
+*.key
+*.crt
+*.secret
+aws-credentials.txt
