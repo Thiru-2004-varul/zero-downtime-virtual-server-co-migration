@@ -46,3 +46,12 @@ build/
 *.crt
 *.secret
 aws-credentials.txt
+
+
+#=====================
+#terraform ignore
+#=====================
+.terraform/
+.terraform.*
+terraform.tfstate
+*.png
