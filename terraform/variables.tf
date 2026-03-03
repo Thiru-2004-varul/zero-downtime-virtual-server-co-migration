@@ -16,3 +16,14 @@ variable "subnet_count" {
 variable "instance_type" {
   default = "t3.medium"
 }
+
+variable "key_name" {
+  description = "EC2 key pair name"
+  type        = string
+}
+
+variable "k8s_node_count" {
+  description = "Total Kubernetes nodes (1 master + workers)"
+  type        = number
+  default     = 2
+}

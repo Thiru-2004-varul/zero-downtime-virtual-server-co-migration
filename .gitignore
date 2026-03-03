@@ -53,5 +53,6 @@ aws-credentials.txt
 #=====================
 .terraform/
 .terraform.*
-terraform.tfstate
+terraform.tfstate*
 *.png
+terraform.tfstate.backup

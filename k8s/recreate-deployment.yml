@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobile-app-recreate
+  labels:
+    strategy: offline-migration
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mobile-app-recreate
+  template:
+    metadata:
+      labels:
+        app: mobile-app-recreate
+    spec:
+      containers:
+      - name: mobile-app
+        image: thiru2004/mobile-app:v1
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5

@@ -22,3 +22,13 @@ output "alb_dns_name" {
   description = "ALB DNS endpoint"
   value       = aws_lb.vmcm_alb.dns_name
 }
+
+output "bastion_public_ip" {
+  description = "Public IP of bastion host"
+  value       = aws_instance.bastion.public_ip
+}
+
+output "private_ec2_private_ips" {
+  description = "Private IPs of Kubernetes nodes"
+  value       = aws_instance.k8s_nodes[*].private_ip
+}
