@@ -3,11 +3,6 @@ name: Virtual Server Co-Migration CI/CD
 on:
   push:
     branches: [main]
-    paths:
-      - 'app/v1/**'
-      - 'app/v2/**'
-      - 'k8s/**'
-      - 'terraform/**'
   pull_request:
     branches: [main]
 
@@ -22,7 +17,6 @@ jobs:
       v1_changed: ${{ steps.filter.outputs.v1 }}
       v2_changed: ${{ steps.filter.outputs.v2 }}
       k8s_changed: ${{ steps.filter.outputs.k8s }}
-      tf_changed: ${{ steps.filter.outputs.terraform }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -35,8 +29,6 @@ jobs:
               - 'app/v2/**'
             k8s:
               - 'k8s/**'
-            terraform:
-              - 'terraform/**'
 
   test-v1:
     name: Test v1 Application
@@ -186,8 +178,6 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
-    needs: detect-changes
-    if: needs.detect-changes.outputs.tf_changed == 'true'
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v3
