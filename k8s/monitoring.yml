@@ -1,10 +1,8 @@
-
 apiVersion: v1
 kind: Namespace
 metadata:
   name: monitoring
-
-
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,12 +16,8 @@ data:
       - job_name: 'mobile-app'
         static_configs:
           - targets: ['mobile-app-service.default.svc.cluster.local:80']
-        metrics_path: /health
-      - job_name: 'kubernetes-nodes'
-        kubernetes_sd_configs:
-          - role: node
-
-
+        metrics_path: /metrics
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,14 +39,14 @@ spec:
         ports:
         - containerPort: 9090
         volumeMounts:
-        - name: config
+        - name: config-volume
           mountPath: /etc/prometheus/prometheus.yml
           subPath: prometheus.yml
       volumes:
-      - name: config
+      - name: config-volume
         configMap:
           name: prometheus-config
-
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -66,7 +60,7 @@ spec:
     - port: 9090
       targetPort: 9090
       nodePort: 30090
-
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,9 +82,11 @@ spec:
         ports:
         - containerPort: 3000
         env:
+        - name: GF_SECURITY_ADMIN_USER
+          value: "admin"
         - name: GF_SECURITY_ADMIN_PASSWORD
           value: "admin123"
-
+---
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,7 +1,11 @@
-from flask import Flask, render_template_string, jsonify
+from flask import Flask, render_template_string, jsonify, Response
+import time
 
 app = Flask(__name__)
 VERSION = "v1"
+
+request_count = 0
+start_time = time.time()
 
 HTML = """
 <!DOCTYPE html>
@@ -107,11 +111,28 @@ HTML = """
 
 @app.route("/")
 def home():
+    global request_count
+    request_count += 1
     return render_template_string(HTML, version=VERSION)
 
 @app.route("/health")
 def health():
     return jsonify({"status": "ok", "version": VERSION}), 200
+
+@app.route("/metrics")
+def metrics():
+    uptime = time.time() - start_time
+    output = f"""# HELP app_requests_total Total requests
+# TYPE app_requests_total counter
+app_requests_total{{version="{VERSION}"}} {request_count}
+# HELP app_uptime_seconds App uptime in seconds
+# TYPE app_uptime_seconds gauge
+app_uptime_seconds{{version="{VERSION}"}} {uptime:.2f}
+# HELP app_up App is running
+# TYPE app_up gauge
+app_up{{version="{VERSION}"}} 1
+"""
+    return Response(output, mimetype="text/plain")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
