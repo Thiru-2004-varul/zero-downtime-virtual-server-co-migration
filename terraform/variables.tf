@@ -25,5 +25,5 @@ variable "key_name" {
 variable "k8s_node_count" {
   description = "Total Kubernetes nodes (1 master + workers)"
   type        = number
-  default     = 2
+  default     = 3
 }
