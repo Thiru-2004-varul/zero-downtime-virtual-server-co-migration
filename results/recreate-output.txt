@@ -1,0 +1,38 @@
+# Offline Migration — Recreate Strategy
+# Test date: $(date)
+# Command: kubectl set image deployment/mobile-app-recreate mobile-app=thiru2004/mobile-app:v2
+# Result: 8 SECONDS DOWNTIME — all pods killed before new pods started
+
+{"status":"ok","version":"v1"} --- 08:52:25
+{"status":"ok","version":"v1"} --- 08:52:26
+{"status":"ok","version":"v1"} --- 08:52:27
+{"status":"ok","version":"v1"} --- 08:52:28
+{"status":"ok","version":"v1"} --- 08:52:29
+{"status":"ok","version":"v1"} --- 08:52:30
+{"status":"ok","version":"v1"} --- 08:52:31
+ --- 08:52:35   ← DOWNTIME START — all pods terminated
+ --- 08:52:36   ← connection refused
+ --- 08:52:37   ← connection refused
+ --- 08:52:38   ← connection refused
+ --- 08:52:39   ← connection refused
+ --- 08:52:40   ← connection refused
+ --- 08:52:41   ← connection refused
+ --- 08:52:42   ← connection refused
+{"status":"ok","version":"v2"} --- 08:52:43   ← DOWNTIME END — new pods ready
+{"status":"ok","version":"v2"} --- 08:52:44
+{"status":"ok","version":"v2"} --- 08:52:45
+{"status":"ok","version":"v2"} --- 08:52:46
+{"status":"ok","version":"v2"} --- 08:52:47
+{"status":"ok","version":"v2"} --- 08:52:49
+{"status":"ok","version":"v2"} --- 08:52:50
+{"status":"ok","version":"v2"} --- 08:52:51
+{"status":"ok","version":"v2"} --- 08:52:52
+{"status":"ok","version":"v2"} --- 08:52:53
+{"status":"ok","version":"v2"} --- 08:52:54
+{"status":"ok","version":"v2"} --- 08:52:55
+{"status":"ok","version":"v2"} --- 08:52:56
+
+# CONCLUSION: v1 → v2 migration caused 8 seconds of complete service unavailability
+# All pods were terminated first — zero pods running during gap
+# Mobile users experienced: connection refused / blank page / app crash
+# NOT acceptable for production deployments
