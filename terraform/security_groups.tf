@@ -32,7 +32,7 @@ resource "aws_security_group" "bastion_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["103.207.224.27/32"]
+    cidr_blocks = ["157.49.107.250/32"]
   }
 
   egress {
@@ -109,4 +109,47 @@ resource "aws_security_group_rule" "alb_to_nodeport" {
   source_security_group_id = aws_security_group.alb_sg.id
   security_group_id        = aws_security_group.private_ec2_sg.id
   description              = "ALB to K8s NodePort"
+}
+
+resource "aws_security_group_rule" "alb_grafana_inbound" {
+  type              = "ingress"
+  from_port         = 3000
+  to_port           = 3000
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb_sg.id
+  description       = "Grafana inbound"
+}
+
+
+resource "aws_security_group_rule" "alb_prometheus_inbound" {
+  type              = "ingress"
+  from_port         = 9090
+  to_port           = 9090
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb_sg.id
+  description       = "Prometheus inbound"
+}
+
+
+resource "aws_security_group_rule" "alb_to_grafana_nodeport" {
+  type                     = "ingress"
+  from_port                = 30030
+  to_port                  = 30030
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.alb_sg.id
+  security_group_id        = aws_security_group.private_ec2_sg.id
+  description              = "ALB to Grafana NodePort"
+}
+
+
+resource "aws_security_group_rule" "alb_to_prometheus_nodeport" {
+  type                     = "ingress"
+  from_port                = 30090
+  to_port                  = 30090
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.alb_sg.id
+  security_group_id        = aws_security_group.private_ec2_sg.id
+  description              = "ALB to Prometheus NodePort"
 }
