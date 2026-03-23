@@ -91,10 +91,9 @@ jobs:
           version: "v1.29.0"
       - name: Validate manifests
         run: |
-          kubectl apply --dry-run=client --validate=false -f k8s/serviceaccount.yml
-          kubectl apply --dry-run=client --validate=false -f k8s/eks-deployment.yml
-          kubectl apply --dry-run=client --validate=false -f k8s/monitoring.yml
-          echo "All manifests valid"
+            kubectl apply --dry-run=client --validate=false --kubeconfig=/dev/null -f k8s/serviceaccount.yml
+            kubectl apply --dry-run=client --validate=false --kubeconfig=/dev/null -f k8s/eks-deployment.yml
+            kubectl apply --dry-run=client --validate=false --kubeconfig=/dev/null -f k8s/monitoring.yml
 
   terraform-plan:
     runs-on: ubuntu-latest
