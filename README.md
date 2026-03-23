@@ -17,7 +17,7 @@ This project answers it with real evidence — not theory.
 | Proof | Real terminal output in `results/` |
 
 ---
-
+ 
 ## How It Works
 
 A Python Flask Tic Tac Toe game runs as **v1** (blue theme).
