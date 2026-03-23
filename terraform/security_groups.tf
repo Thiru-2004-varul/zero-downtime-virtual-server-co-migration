@@ -153,3 +153,31 @@ resource "aws_security_group_rule" "alb_to_prometheus_nodeport" {
   security_group_id        = aws_security_group.private_ec2_sg.id
   description              = "ALB to Prometheus NodePort"
 }
+
+# ── EKS Node Security Group ─────────────────────────────
+
+resource "aws_security_group" "eks_nodes_sg" {
+  name        = "${var.cluster_name}-nodes-sg"
+  description = "Security group for EKS worker nodes"
+  vpc_id      = aws_vpc.vmcm_vpc.id
+
+  ingress {
+    description = "Node to node all traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name                                        = "${var.cluster_name}-nodes-sg"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+  }
+}
