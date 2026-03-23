@@ -1,5 +1,3 @@
-
-
 output "vpc_id" {
   description = "VPC ID"
   value       = aws_vpc.vmcm_vpc.id
@@ -15,30 +13,8 @@ output "private_subnet_ids" {
   value       = aws_subnet.private_subnets[*].id
 }
 
-output "ec2_instance_ids" {
-  description = "EC2 instance IDs"
-  value       = aws_instance.k8s_nodes[*].id
-}
-
-output "alb_dns_name" {
-  description = "ALB DNS endpoint"
-  value       = aws_lb.vmcm_alb.dns_name
-}
-
-output "bastion_public_ip" {
-  description = "Public IP of bastion host"
-  value       = aws_instance.bastion.public_ip
-}
-
-output "private_ec2_private_ips" {
-  description = "Private IPs of Kubernetes nodes"
-  value       = aws_instance.k8s_nodes[*].private_ip
-}
-
-# ──  EKS outputs ──────────────────────────────────────────
-
 output "eks_cluster_name" {
-  description = "EKS cluster name — use in aws eks update-kubeconfig"
+  description = "EKS cluster name"
   value       = aws_eks_cluster.vmcm_eks.name
 }
 
@@ -48,7 +24,7 @@ output "eks_cluster_endpoint" {
 }
 
 output "eks_oidc_issuer" {
-  description = "EKS OIDC issuer URL — needed for IRSA"
+  description = "EKS OIDC issuer URL"
   value       = aws_eks_cluster.vmcm_eks.identity[0].oidc[0].issuer
 }
 
@@ -63,18 +39,14 @@ output "mobile_app_irsa_role_arn" {
 }
 
 output "github_actions_role_arn" {
-  description = "IAM role ARN for GitHub Actions OIDC — no access keys needed"
+  description = "IAM role ARN for GitHub Actions OIDC"
   value       = aws_iam_role.github_actions.arn
 }
 
-# ── ECR outputs ──────────────────────────────────────────
-
 output "ecr_repository_url" {
-  description = "ECR repo URL — use in docker push and k8s image field"
+  description = "ECR repo URL"
   value       = aws_ecr_repository.mobile_app.repository_url
 }
-
-# ──  SSM / kubectl helper commands ───────────────────────
 
 output "kubeconfig_command" {
   description = "Run this after terraform apply to configure kubectl"
@@ -82,6 +54,6 @@ output "kubeconfig_command" {
 }
 
 output "ssm_connect_note" {
-  description = "How to connect to EKS nodes — no port 22 needed"
+  description = "How to connect to EKS nodes"
   value       = "AWS Console → EC2 → select node → Connect → Session Manager"
 }

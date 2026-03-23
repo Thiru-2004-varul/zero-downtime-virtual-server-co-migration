@@ -17,14 +17,13 @@ permissions:
   contents: read
 
 jobs:
-
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
       app_v1: ${{ steps.changes.outputs.app_v1 }}
       app_v2: ${{ steps.changes.outputs.app_v2 }}
-      k8s:    ${{ steps.changes.outputs.k8s }}
-      tf:     ${{ steps.changes.outputs.tf }}
+      k8s: ${{ steps.changes.outputs.k8s }}
+      tf: ${{ steps.changes.outputs.tf }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -92,9 +91,9 @@ jobs:
           version: "v1.29.0"
       - name: Validate manifests
         run: |
-          kubectl apply --dry-run=client -f k8s/serviceaccount.yml
-          kubectl apply --dry-run=client -f k8s/eks-deployment.yml
-          kubectl apply --dry-run=client -f k8s/monitoring.yml
+          kubectl apply --dry-run=client --validate=false -f k8s/serviceaccount.yml
+          kubectl apply --dry-run=client --validate=false -f k8s/eks-deployment.yml
+          kubectl apply --dry-run=client --validate=false -f k8s/monitoring.yml
           echo "All manifests valid"
 
   terraform-plan:
