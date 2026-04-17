@@ -56,3 +56,4 @@ aws-credentials.txt
 terraform.tfstate*
 *.png
 terraform.tfstate.backup
+*.pem
